@@ -155,7 +155,7 @@ def positions():
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), f'mmtm_pos{slope_suffix}' +dir_name + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), f'mmtm{slope_suffix}' +dir_name + '.csv'), index = False)
 
         watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dir_name+'.txt'), "w")
         first_10_pf = ""
