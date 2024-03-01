@@ -10,7 +10,7 @@ from momentum_data import cfg
 from datetime import datetime
 
 dir_datetime=datetime.now()
-dir_name='_'+str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
+dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
