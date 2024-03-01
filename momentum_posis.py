@@ -165,6 +165,7 @@ def positions():
         df.to_csv(os.path.join(os.getcwd(), f'mmtm{slope_suffix}' +dir_name + '.csv'), index = False)
 
         watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dir_name+'.txt'), "w")
+        
         first_10_pf = ""
         tv_ticker_count = 0
         for index, row in df.iterrows():
@@ -175,8 +176,11 @@ def positions():
                 first_10_pf = f'{first_10_pf}{plus_sign}{row[TITLE_SHARES]}*{row[TITLE_TICKER]}'
         # first_10_combined = f'{first_10_combined})/{tv_ticker_count}'
         watchlist_stocks = ','.join(df.head(MAX_STOCKS)[TITLE_TICKER])
-        watchlist.write(f'{first_10_pf},{watchlist_stocks}')
+        ##watchlist.write(f'{first_10_pf},{watchlist_stocks}')
+        watchlist.write(f'{first_10_pf}')
         watchlist.close()
+        WL = open(os.path.join(DIR, f'mmtmwatch{slope_suffix}' +dir_name+'.txt'), "w")
+        WL.write(f'{watchlist_stocks}')
 
         dfs.append(df)
 
