@@ -7,6 +7,11 @@ from datetime import date
 from scipy.stats import linregress
 import yaml
 from momentum_data import cfg
+import datetime
+
+dir_datetime=datetime.now(timezone('UTC')).astimezone(timezone('US/Eastern'))
+dir_name=str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
+
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -143,16 +148,16 @@ def positions():
             (sums, stocks_count) = calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE])
             df[TITLE_SUM] = sums
         
-        dest_dir=os.path.join(DIR,'output')
+        dest_dir=os.path.join(os.getcwd(),'output')
 
         isExist = os.path.exists(dest_dir)
 
-
+        
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), f'mmtm_posis{slope_suffix}.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), f'mmtm_posis{slope_suffix}' + dir_name + '.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, f'Momentum{slope_suffix}.txt'), "w")
+        watchlist = open(os.path.join(DIR, f'Momentum{slope_suffix}' + dirname+'.txt'), "w")
         first_10_pf = ""
         tv_ticker_count = 0
         for index, row in df.iterrows():
