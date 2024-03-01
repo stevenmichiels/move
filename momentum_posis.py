@@ -7,9 +7,9 @@ from datetime import date
 from scipy.stats import linregress
 import yaml
 from momentum_data import cfg
-import datetime
+from datetime import datetime
 
-dir_datetime=datetime.now(timezone('UTC')).astimezone(timezone('US/Eastern'))
+dir_datetime=datetime.now()
 dir_name=str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
 
 
