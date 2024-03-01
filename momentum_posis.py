@@ -150,9 +150,9 @@ def positions():
 
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(dest_dir, f'mmtm_posis{slope_suffix}.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), f'mmtm_posis{slope_suffix}.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, "output", f'Momentum{slope_suffix}.txt'), "w")
+        watchlist = open(os.path.join(DIR, f'Momentum{slope_suffix}.txt'), "w")
         first_10_pf = ""
         tv_ticker_count = 0
         for index, row in df.iterrows():
