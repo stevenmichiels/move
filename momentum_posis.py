@@ -142,8 +142,15 @@ def positions():
             df[TITLE_POS_SIZE] = calc_pos_size(df[TITLE_SHARES], df[TITLE_PRICE])
             (sums, stocks_count) = calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE])
             df[TITLE_SUM] = sums
+        
+        dest_dir=os.path.join(DIR,'output')
 
-        df.to_csv(os.path.join(DIR, "output", f'mmtm_posis{slope_suffix}.csv'), index = False)
+        isExist = os.path.exists(dest_dir)
+
+
+        if not isExist:
+            os.makedirs(dest_dir)
+        df.to_csv(os.path.join(dest_dir, f'mmtm_posis{slope_suffix}.csv'), index = False)
 
         watchlist = open(os.path.join(DIR, "output", f'Momentum{slope_suffix}.txt'), "w")
         first_10_pf = ""
