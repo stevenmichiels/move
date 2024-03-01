@@ -57,7 +57,7 @@ def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, univers
     for row in table.findAll('tr')[tablePos:]:
         sec = {}
         sec["ticker"] = row.findAll('td')[tickerPos-1].text.strip()
-        ##sec["sector"] = row.findAll('td')[tickerPos-1+sectorPosOffset].text.strip()
+        sec["sector"] = row.findAll('td')[tickerPos-1+sectorPosOffset].text.strip()
         sec["universe"] = universe
         secs[sec["ticker"]] = sec
     with open(os.path.join(DIR, "tmp", "tickers.pickle"), "wb") as f:
@@ -87,7 +87,7 @@ def create_price_history_file(tickers_dict):
         json.dump(tickers_dict, fp)
 
 def enrich_ticker_data(ticker_response, security):
-    ##ticker_response["sector"] = security["sector"]
+    ticker_response["sector"] = security["sector"]
     ticker_response["universe"] = security["universe"]
 
 def tda_params(apikey, period_type="year", period=1, frequency_type="daily", frequency=1):
@@ -137,7 +137,7 @@ def load_prices_from_tda(securities):
         load_times.append(current_load_time)
         remaining_seconds = get_remaining_seconds(load_times, idx, len(securities))
         ticker_data = response.json()
-        ##enrich_ticker_data(ticker_data, sec)
+        enrich_ticker_data(ticker_data, sec)
         tickers_dict[sec["ticker"]] = ticker_data
         error_text = f' Error with code {response.status_code}' if response.status_code != 200 else ''
         print_data_progress(sec["ticker"], sec["universe"], idx, securities, error_text, now - start, remaining_seconds)
