@@ -145,7 +145,7 @@ def positions():
                 risk_factor = RISK_FACTOR * (stocks_count / POS_COUNT_TARGET)
             df[TITLE_SHARES] = calc_stocks_amount(ACCOUNT_VALUE, risk_factor, df[TITLE_RISK])
             df[TITLE_POS_SIZE] = np.round(calc_pos_size(df[TITLE_SHARES], df[TITLE_PRICE]),1)
-            (sums, stocks_count) = np.round(calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE]),1)
+            (sums, stocks_count) = calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE])
             df[TITLE_SUM] = np.round(sums,1)
 
             column_to_move = df.pop(TITLE_SHARES)
