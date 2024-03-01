@@ -43,7 +43,7 @@ TITLE_SECTOR = "Sector"
 TITLE_UNIVERSE = "Universe"
 TITLE_PERCENTILE = "Percentile"
 TITLE_MOMENTUM = "Momentum (%)"
-TITLE_RISK = "ATR20d"
+TITLE_RISK = "ATR20d ($)"
 TITLE_PRICE = "Price"
 TITLE_SHARES = "Shares"
 TITLE_POS_SIZE = "Position ($)"
@@ -125,14 +125,14 @@ def positions():
                         if not slope_days in momentums:
                             momentums[slope_days] = []
                         mmntm = momentum(pd.Series(closes[-slope_days:]))
-                        momentums[slope_days].append((0, ticker, json[ticker]["sector"], json[ticker]["universe"], mmntm, atr_20(json[ticker]["candles"]), closes[-1]))
+                        momentums[slope_days].append((0, ticker, np.round(mmntm,1), np.round(atr_20(json[ticker]["candles"]),1), np.round(closes[-1],1), json[ticker]["sector"], json[ticker]["universe"]))
         except KeyError:
             print(f'Ticker {ticker} has corrupted data.')
     slope_std = SLOPE_DAYS[0]
     dfs = []
     for slope_days in SLOPE_DAYS:
         slope_suffix = f'_{slope_days}' if slope_days != slope_std else ''
-        df = pd.DataFrame(momentums[slope_days], columns=[TITLE_RANK, TITLE_TICKER, TITLE_SECTOR, TITLE_UNIVERSE, TITLE_MOMENTUM, TITLE_RISK, TITLE_PRICE])
+        df = pd.DataFrame(momentums[slope_days], columns=[TITLE_RANK, TITLE_TICKER, TITLE_MOMENTUM, TITLE_RISK, TITLE_PRICE,TITLE_SECTOR, TITLE_UNIVERSE])
         df = df.sort_values(([TITLE_MOMENTUM]), ascending=False)
         df[TITLE_RANK] = ranks
         # df[TITLE_PERCENTILE] = pd.qcut(df[TITLE_MOMENTUM], 100, labels=False)
@@ -144,9 +144,16 @@ def positions():
             if run > 1 and not RISK_FACTOR_CFG and POS_COUNT_TARGET and (stocks_count < POS_COUNT_TARGET or stocks_count - POS_COUNT_TARGET > 1):
                 risk_factor = RISK_FACTOR * (stocks_count / POS_COUNT_TARGET)
             df[TITLE_SHARES] = calc_stocks_amount(ACCOUNT_VALUE, risk_factor, df[TITLE_RISK])
-            df[TITLE_POS_SIZE] = calc_pos_size(df[TITLE_SHARES], df[TITLE_PRICE])
-            (sums, stocks_count) = calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE])
-            df[TITLE_SUM] = sums
+            df[TITLE_POS_SIZE] = np.round(calc_pos_size(df[TITLE_SHARES], df[TITLE_PRICE]),1)
+            (sums, stocks_count) = np.round(calc_sums(ACCOUNT_VALUE, df[TITLE_POS_SIZE]),1)
+            df[TITLE_SUM] = np.round(sums,1)
+
+            column_to_move = df.pop(TITLE_SHARES)
+            df.insert(3, TITLE_SHARES, column_to_move)
+            column_to_move = df.pop(TITLE_POS_SIZE)
+            df.insert(4, TITLE_POS_SIZE, column_to_move)
+            column_to_move = df.pop(TITLE_SUM)
+            df.insert(5, TITLE_SUM, column_to_move)
         
         dest_dir=os.path.join(os.getcwd(),'output')
 
@@ -155,7 +162,7 @@ def positions():
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), f'mmtm_pos{slope_suffix}' +dir_name + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), f'mmtm{slope_suffix}' +dir_name + '.csv'), index = False)
 
         watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dir_name+'.txt'), "w")
         first_10_pf = ""
