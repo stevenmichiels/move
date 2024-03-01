@@ -10,7 +10,7 @@ from momentum_data import cfg
 from datetime import datetime
 
 dir_datetime=datetime.now()
-dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
+dir_name= '_'+str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -155,9 +155,9 @@ def positions():
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), f'mmtm_posis{slope_suffix}' +dir_name + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), f'mmtm_pos{slope_suffix}' +dir_name + '.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dirname+'.txt'), "w")
+        watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dir_name+'.txt'), "w")
         first_10_pf = ""
         tv_ticker_count = 0
         for index, row in df.iterrows():
