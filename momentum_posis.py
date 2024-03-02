@@ -40,7 +40,7 @@ EXCLUDE_MA_CROSSES = cfg("EXCLUDE_ALL_MA_CROSSES")
 TITLE_RANK = "Rank"
 TITLE_TICKER = "Ticker"
 TITLE_SECTOR = "Sector"
-TITLE_UNIVERSE = "Universe"
+TITLE_UNIVERSE = "ETF"
 TITLE_PERCENTILE = "Percentile"
 TITLE_MOMENTUM = "Momentum (%)"
 TITLE_RISK = "ATR20d ($)"
@@ -125,7 +125,7 @@ def positions():
                         if not slope_days in momentums:
                             momentums[slope_days] = []
                         mmntm = momentum(pd.Series(closes[-slope_days:]))
-                        momentums[slope_days].append((0, ticker, np.round(mmntm,1), np.round(atr_20(json[ticker]["candles"]),1), np.round(closes[-1],1), json[ticker]["universe"]))
+                        momentums[slope_days].append((0, ticker, np.round(mmntm,1), np.round(atr_20(json[ticker]["candles"]),1), np.round(closes[-1],1), json[ticker]["ETF"]))
         except KeyError:
             print(f'Ticker {ticker} has corrupted data.')
     slope_std = SLOPE_DAYS[0]

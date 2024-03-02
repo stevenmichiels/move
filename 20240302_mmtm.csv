@@ -1,4 +1,4 @@
-Rank,Ticker,Momentum (%),Shares,Position ($),Sum ($),ATR20d ($),Price,Universe
+Rank,Ticker,Momentum (%),Shares,Position ($),Sum ($),ATR20d ($),Price,ETF
 1,CRWD,509.1,19,5977.4,5977.4,14.4,314.6,QQQ
 2,AMD,480.3,34,6888.4,12865.8,8.1,202.6,SP500
 3,NVDA,404.4,8,6582.4,19448.2,32.8,822.8,SP500

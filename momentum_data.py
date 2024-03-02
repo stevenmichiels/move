@@ -49,7 +49,7 @@ def cfg(key):
         except:
             return None
 
-def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, universe = "N/A"):
+def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, ETF = "N/A"):
     resp = requests.get(url)
     soup = bs.BeautifulSoup(resp.text, 'lxml')
     table = soup.findAll('table', {'class': 'wikitable sortable'})[tablePos-1]
@@ -58,7 +58,7 @@ def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, univers
         sec = {}
         sec["ticker"] = row.findAll('td')[tickerPos-1].text.strip()
         ##sec["sector"] = row.findAll('td')[tickerPos-1+sectorPosOffset].text.strip()
-        sec["universe"] = universe
+        sec["ETF"] = ETF
         secs[sec["ticker"]] = sec
     with open(os.path.join(DIR, "tmp", "tickers.pickle"), "wb") as f:
         pickle.dump(secs, f)
@@ -67,13 +67,13 @@ def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, univers
 def get_resolved_securities():
     tickers = {}
     if cfg("NQ100"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/Nasdaq-100', 2, 3, universe="QQQ"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/Nasdaq-100', 2, 3, ETF="QQQ"))
     if cfg("SP500"):
-        tickers.update(getSecurities('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies', sectorPosOffset=3, universe="SP500"))
+        tickers.update(getSecurities('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies', sectorPosOffset=3, ETF="SP500"))
     if cfg("SP400"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies', 2, universe="SP400"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies', 2, ETF="SP400"))
     if cfg("SP600"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies', 2, universe="SP600"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies', 2, ETF="SP600"))
     return tickers
 
 API_KEY = cfg("API_KEY")
@@ -88,7 +88,7 @@ def create_price_history_file(tickers_dict):
 
 def enrich_ticker_data(ticker_response, security):
     ##ticker_response["sector"] = security["sector"]
-    ticker_response["universe"] = security["universe"]
+    ticker_response["ETF"] = security["ETF"]
 
 def tda_params(apikey, period_type="year", period=1, frequency_type="daily", frequency=1):
     """Returns tuple of api get params. Uses clenow default values."""
@@ -100,7 +100,7 @@ def tda_params(apikey, period_type="year", period=1, frequency_type="daily", fre
            ("frequency", frequency)
     )
 
-def print_data_progress(ticker, universe, idx, securities, error_text, elapsed_s, remaining_s):
+def print_data_progress(ticker, ETF, idx, securities, error_text, elapsed_s, remaining_s):
     dt_ref = datetime.fromtimestamp(0)
     dt_e = datetime.fromtimestamp(elapsed_s)
     elapsed = dateutil.relativedelta.relativedelta (dt_e, dt_ref)
@@ -110,7 +110,7 @@ def print_data_progress(ticker, universe, idx, securities, error_text, elapsed_s
         remaining_string = f'{remaining.minutes}m {remaining.seconds}s'
     else:
         remaining_string = "?"
-    print(f'{ticker} from {universe}{error_text} ({idx+1} / {len(securities)}). Elapsed: {elapsed.minutes}m {elapsed.seconds}s. Remaining: {remaining_string}.')
+    print(f'{ticker} from {ETF}{error_text} ({idx+1} / {len(securities)}). Elapsed: {elapsed.minutes}m {elapsed.seconds}s. Remaining: {remaining_string}.')
 
 def get_remaining_seconds(all_load_times, idx, len):
     load_time_ma = pd.Series(all_load_times).rolling(np.minimum(idx+1, 25)).mean().tail(1).item()
@@ -140,7 +140,7 @@ def load_prices_from_tda(securities):
         enrich_ticker_data(ticker_data, sec)
         tickers_dict[sec["ticker"]] = ticker_data
         error_text = f' Error with code {response.status_code}' if response.status_code != 200 else ''
-        print_data_progress(sec["ticker"], sec["universe"], idx, securities, error_text, now - start, remaining_seconds)
+        print_data_progress(sec["ticker"], sec["ETF"], idx, securities, error_text, now - start, remaining_seconds)
 
     create_price_history_file(tickers_dict)
 
@@ -187,7 +187,7 @@ def load_prices_from_yahoo(securities):
         current_load_time = now - r_start
         load_times.append(current_load_time)
         remaining_seconds = remaining_seconds = get_remaining_seconds(load_times, idx, len(securities))
-        print_data_progress(security["ticker"], security["universe"], idx, securities, "", time.time() - start, remaining_seconds)
+        print_data_progress(security["ticker"], security["ETF"], idx, securities, "", time.time() - start, remaining_seconds)
         tickers_dict[security["ticker"]] = ticker_data
     create_price_history_file(tickers_dict)
 
