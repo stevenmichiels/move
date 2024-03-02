@@ -19,10 +19,6 @@ from datetime import datetime
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
-ETF_filter = ['QQQ', 'SPX','SP400']
-ETF_filter = ['QQQ', 'SPX']
-
-
 if not os.path.exists(os.path.join(DIR, 'data')):
     os.makedirs(os.path.join(DIR, 'data'))
 if not os.path.exists(os.path.join(DIR, 'tmp')):
@@ -83,16 +79,13 @@ def get_resolved_securities():
 API_KEY = cfg("API_KEY")
 TD_API = cfg("TICKERS_API")
 PRICE_DATA_OUTPUT = os.path.join(DIR, "data", "price_history.json")
-##SECURITIES = get_resolved_securities().values()
+SECURITIES = get_resolved_securities().values()
 # etf = [num['ETF'] for num in SECURITIES]
 # tickers = [num['ticker'] for num in SECURITIES]
 # df_csv = pd.DataFrame(columns=['Ticker','ETF'])
 # df_csv.Ticker=tickers
 # df_csv.ETF=etf                     
 # df_csv.to_csv('tickers.csv', index=False)
-df_securities = pd.read_csv('tickers.csv', delimiter=',')
-df_securities = df_securities[df_securities['ETF'].isin(ETF_filter)]
-df_securities=df_securities.reset_index()
 
 DATA_SOURCE = cfg("DATA_SOURCE")
 
@@ -194,7 +187,7 @@ def load_prices_from_yahoo(securities):
     start_date = today - dt.timedelta(days=1*365)
     tickers_dict = {}
     load_times = []
-    for idx, security in df_securities.iterrows():
+    for idx, security in enumerate(securities):
         r_start = time.time()
         ticker_data = get_yf_data(security, start_date, today)
         now = time.time()
@@ -219,11 +212,7 @@ def save_data(source, securities):
 ##df = pd.read_csv('tickers.csv', delimiter=',')
 
 def main():
-    save_data(DATA_SOURCE, df_securities)
+    save_data(DATA_SOURCE, SECURITIES)
 
 if __name__ == "__main__":
     main()
-
-    
-    
-    
