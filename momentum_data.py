@@ -57,7 +57,7 @@ def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, univers
     for row in table.findAll('tr')[tablePos:]:
         sec = {}
         sec["ticker"] = row.findAll('td')[tickerPos-1].text.strip()
-        sec["sector"] = row.findAll('td')[tickerPos-1+sectorPosOffset].text.strip()
+        ##sec["sector"] = row.findAll('td')[tickerPos-1+sectorPosOffset].text.strip()
         sec["universe"] = universe
         secs[sec["ticker"]] = sec
     with open(os.path.join(DIR, "tmp", "tickers.pickle"), "wb") as f:
@@ -67,13 +67,13 @@ def getSecurities(url, tickerPos = 1, tablePos = 1, sectorPosOffset = 1, univers
 def get_resolved_securities():
     tickers = {}
     if cfg("NQ100"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/Nasdaq-100', 2, 3, universe="Nasdaq 100"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/Nasdaq-100', 2, 3, universe="QQQ"))
     if cfg("SP500"):
-        tickers.update(getSecurities('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies', sectorPosOffset=3, universe="S&P 500"))
+        tickers.update(getSecurities('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies', sectorPosOffset=3, universe="SP500"))
     if cfg("SP400"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies', 2, universe="S&P 400"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies', 2, universe="SP400"))
     if cfg("SP600"):
-        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies', 2, universe="S&P 600"))
+        tickers.update(getSecurities('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies', 2, universe="SP600"))
     return tickers
 
 API_KEY = cfg("API_KEY")
@@ -87,7 +87,7 @@ def create_price_history_file(tickers_dict):
         json.dump(tickers_dict, fp)
 
 def enrich_ticker_data(ticker_response, security):
-    ticker_response["sector"] = security["sector"]
+    ##ticker_response["sector"] = security["sector"]
     ticker_response["universe"] = security["universe"]
 
 def tda_params(apikey, period_type="year", period=1, frequency_type="daily", frequency=1):

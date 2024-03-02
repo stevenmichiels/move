@@ -10,7 +10,7 @@ from momentum_data import cfg
 from datetime import datetime
 
 dir_datetime=datetime.now()
-dir_name= '_'+str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
+dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')
 
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -125,14 +125,14 @@ def positions():
                         if not slope_days in momentums:
                             momentums[slope_days] = []
                         mmntm = momentum(pd.Series(closes[-slope_days:]))
-                        momentums[slope_days].append((0, ticker, np.round(mmntm,1), np.round(atr_20(json[ticker]["candles"]),1), np.round(closes[-1],1), json[ticker]["sector"], json[ticker]["universe"]))
+                        momentums[slope_days].append((0, ticker, np.round(mmntm,1), np.round(atr_20(json[ticker]["candles"]),1), np.round(closes[-1],1), json[ticker]["universe"]))
         except KeyError:
             print(f'Ticker {ticker} has corrupted data.')
     slope_std = SLOPE_DAYS[0]
     dfs = []
     for slope_days in SLOPE_DAYS:
         slope_suffix = f'_{slope_days}' if slope_days != slope_std else ''
-        df = pd.DataFrame(momentums[slope_days], columns=[TITLE_RANK, TITLE_TICKER, TITLE_MOMENTUM, TITLE_RISK, TITLE_PRICE,TITLE_SECTOR, TITLE_UNIVERSE])
+        df = pd.DataFrame(momentums[slope_days], columns=[TITLE_RANK, TITLE_TICKER, TITLE_MOMENTUM, TITLE_RISK, TITLE_PRICE, TITLE_UNIVERSE])
         df = df.sort_values(([TITLE_MOMENTUM]), ascending=False)
         df[TITLE_RANK] = ranks
         # df[TITLE_PERCENTILE] = pd.qcut(df[TITLE_MOMENTUM], 100, labels=False)
@@ -162,9 +162,9 @@ def positions():
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), f'mmtm{slope_suffix}' +dir_name + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), dir_name+'_'+f'mmtm{slope_suffix}' + '.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, f'mmtm{slope_suffix}' +dir_name+'.txt'), "w")
+        watchlist = open(os.path.join(DIR, dir_name+'_'+f'mmtm{slope_suffix}' +'.txt'), "w")
         
         first_10_pf = ""
         tv_ticker_count = 0
@@ -179,7 +179,7 @@ def positions():
         ##watchlist.write(f'{first_10_pf},{watchlist_stocks}')
         watchlist.write(f'{first_10_pf}')
         watchlist.close()
-        WL = open(os.path.join(DIR, f'mmtmwatch{slope_suffix}' +dir_name+'.txt'), "w")
+        WL = open(os.path.join(DIR, dir_name+'_'+f'mmtmwatch{slope_suffix}' +'.txt'), "w")
         WL.write(f'{watchlist_stocks}')
 
         dfs.append(df)
