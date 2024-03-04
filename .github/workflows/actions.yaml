@@ -2,9 +2,9 @@ name: move workflow
 
 #on: [workflow_dispatch]
   
-on:
-  schedule:
-     - cron: '1 4 * * 6'     #'45 14 * * 1-5' (see https://crontab.guru)
+#on:
+  #schedule:
+     #- cron: '1 4 * * 6'     #'45 14 * * 1-5' (see https://crontab.guru)
 
 jobs:
   build:
