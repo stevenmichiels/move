@@ -18,9 +18,27 @@ def main2():
    momentum_data_test.main(etfstring)
    momentum_posis_test.main(etfstring)
 
+def main3():
+   etfstring = ['SOXX']
+   momentum_data_test.main(etfstring)
+   momentum_posis_test.main(etfstring)
+
+def main4():
+   etfstring = ['IGV']
+   momentum_data_test.main(etfstring)
+   momentum_posis_test.main(etfstring)
+
+def main5():
+   etfstring = ['WCLD']
+   momentum_data_test.main(etfstring)
+   momentum_posis_test.main(etfstring)
+   
 if __name__ == "__main__":
    main1()
-   ##main2()
+   main2()
+   main3()
+   main4()
+   main5()
 
 
 
