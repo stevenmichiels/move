@@ -193,7 +193,7 @@ def positions(ETF_filter):
         ##watchlist.write(f'{first_10_pf},{watchlist_stocks}')
         watchlist.write(f'{first_10_pf}')
         watchlist.close()
-        WL = open(os.path.join(DIR, dir_name+'_'+ETF_string+f'mmtmwatch{slope_suffix}' +'.txt'), "w")
+        WL = open(os.path.join(DIR, dir_name+ETF_string+f'mmtmwatch{slope_suffix}' +'.txt'), "w")
         WL.write(f'{watchlist_stocks}')
 
         dfs.append(df)
