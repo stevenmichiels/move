@@ -1,6 +1,6 @@
 name: move workflow
 
-#on: [workflow_dispatch]
+on: [workflow_dispatch]
   
 #on:
   #schedule:
