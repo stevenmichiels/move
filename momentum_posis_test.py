@@ -176,9 +176,9 @@ def positions(ETF_filter):
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), dir_name+ETF_string+'__'+f'mmtm{slope_suffix}' + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), dir_name+ETF_string+f'mmtm{slope_suffix}' + '.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, dir_name+ETF_string+'__'+f'mmtm{slope_suffix}' +'.txt'), "w")
+        watchlist = open(os.path.join(DIR, dir_name+ETF_string+f'mmtm{slope_suffix}' +'.txt'), "w")
         
         first_10_pf = ""
         tv_ticker_count = 0
@@ -193,7 +193,7 @@ def positions(ETF_filter):
         ##watchlist.write(f'{first_10_pf},{watchlist_stocks}')
         watchlist.write(f'{first_10_pf}')
         watchlist.close()
-        WL = open(os.path.join(DIR, dir_name+'_'+ETF_string+'__'+f'_mmtmwatch{slope_suffix}' +'.txt'), "w")
+        WL = open(os.path.join(DIR, dir_name+'_'+ETF_string+f'mmtmwatch{slope_suffix}' +'.txt'), "w")
         WL.write(f'{watchlist_stocks}')
 
         dfs.append(df)
