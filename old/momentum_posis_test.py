@@ -6,7 +6,7 @@ import os
 from datetime import date
 from scipy.stats import linregress
 import yaml
-from momentum_data import cfg
+from momentum_data_test import cfg
 from datetime import datetime
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -16,7 +16,7 @@ PRICE_DATA_INFO = os.path.join(DIR, "data", "price_info.txt")
 with open(PRICE_DATA_INFO, "r") as fp:
     PRICE_DATA_INFO = fp.read()
 dir_datetime=datetime.now()
-dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')+'_'+PRICE_DATA_INFO
+dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')+'_'
 
 
 
@@ -106,7 +106,9 @@ def calc_sums(account_value, pos_size):
                 stocks_count = stocks_count + 1
     return (sums, stocks_count)
 
-def positions():
+def positions(ETF_filter):
+
+
     """Returns a dataframe doubly sorted by momentum factor, with atr and position size"""
     json = read_json(PRICE_DATA)
     momentums = {}
@@ -199,8 +201,8 @@ def positions():
     return dfs
 
 
-def main():
-    posis = positions()
+def main(ETF_filter):
+    posis = positions(ETF_filter)
     print(posis[0])
     print(PRICE_DATA_INFO)
 
@@ -209,4 +211,4 @@ def main():
         input("Press Enter key to exit...")
 
 if __name__ == "__main__":
-    main()
+    main(ETF_filter)

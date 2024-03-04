@@ -16,7 +16,7 @@ PRICE_DATA_INFO = os.path.join(DIR, "data", "price_info.txt")
 with open(PRICE_DATA_INFO, "r") as fp:
     PRICE_DATA_INFO = fp.read()
 dir_datetime=datetime.now()
-dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')+'_'+PRICE_DATA_INFO
+dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')+'_'
 
 
 
@@ -106,7 +106,9 @@ def calc_sums(account_value, pos_size):
                 stocks_count = stocks_count + 1
     return (sums, stocks_count)
 
-def positions():
+def positions(ETF_filter):
+    ETF_string = '_'.join(ETF_filter)+'_'
+
     """Returns a dataframe doubly sorted by momentum factor, with atr and position size"""
     json = read_json(PRICE_DATA)
     momentums = {}
@@ -174,9 +176,9 @@ def positions():
         
         if not isExist:
             os.makedirs(dest_dir)
-        df.to_csv(os.path.join(os.getcwd(), dir_name+'_'+f'mmtm{slope_suffix}' + '.csv'), index = False)
+        df.to_csv(os.path.join(os.getcwd(), dir_name+ETF_string+'__'+f'mmtm{slope_suffix}' + '.csv'), index = False)
 
-        watchlist = open(os.path.join(DIR, dir_name+'_'+f'mmtm{slope_suffix}' +'.txt'), "w")
+        watchlist = open(os.path.join(DIR, dir_name+ETF_string+'__'+f'mmtm{slope_suffix}' +'.txt'), "w")
         
         first_10_pf = ""
         tv_ticker_count = 0
@@ -191,7 +193,7 @@ def positions():
         ##watchlist.write(f'{first_10_pf},{watchlist_stocks}')
         watchlist.write(f'{first_10_pf}')
         watchlist.close()
-        WL = open(os.path.join(DIR, dir_name+'_'+f'mmtmwatch{slope_suffix}' +'.txt'), "w")
+        WL = open(os.path.join(DIR, dir_name+'_'+ETF_string+'__'+f'_mmtmwatch{slope_suffix}' +'.txt'), "w")
         WL.write(f'{watchlist_stocks}')
 
         dfs.append(df)
@@ -199,14 +201,14 @@ def positions():
     return dfs
 
 
-def main():
-    posis = positions()
+def main(ETF_filter):
+    posis = positions(ETF_filter)
     print(posis[0])
-    print(PRICE_DATA_INFO)
 
-    print("Momentum gainers from " + PRICE_DATA_INFO + " extracted.")
+
+    print("Momentum gainers from " + " extracted.")
     if cfg("EXIT_WAIT_FOR_ENTER"):
         input("Press Enter key to exit...")
 
 if __name__ == "__main__":
-    main()
+    main(ETF_filter)
