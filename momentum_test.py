@@ -32,13 +32,19 @@ def main5():
    etfstring = ['WCLD']
    momentum_data_test.main(etfstring)
    momentum_posis_test.main(etfstring)
+
+def main6():
+   etfstring = ['XOP', 'XLE']
+   momentum_data_test.main(etfstring)
+   momentum_posis_test.main(etfstring)
    
 if __name__ == "__main__":
-   main1()
-   main2()
-   main3()
-   main4()
-   main5()
+   #main1()
+   #main2()
+   #main3()
+   #main4()
+   #main5()
+   main6()
 
 
 
