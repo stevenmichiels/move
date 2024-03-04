@@ -39,11 +39,11 @@ def main6():
    momentum_posis_test.main(etfstring)
    
 if __name__ == "__main__":
-   #main1()
-   #main2()
-   #main3()
-   #main4()
-   #main5()
+   main1()
+   main2()
+   main3()
+   main4()
+   main5()
    main6()
 
 
