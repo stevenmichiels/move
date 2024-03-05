@@ -38,13 +38,20 @@ def main6():
    momentum_data_test.main(etfstring)
    momentum_posis_test.main(etfstring)
    
+
+def main7():
+   etfstring = ['SP400']
+   momentum_data_test.main(etfstring)
+   momentum_posis_test.main(etfstring)
+   
 if __name__ == "__main__":
-   main1()
-   main2()
-   main3()
-   main4()
-   main5()
-   main6()
+   #main1()
+   #main2()
+   #main3()
+   #main4()
+   #main5()
+   #main6()
+   main7()
 
 
 
