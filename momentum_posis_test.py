@@ -6,7 +6,7 @@ import os
 from datetime import date
 from scipy.stats import linregress
 import yaml
-from momentum_data import cfg
+from momentum_data_test import cfg
 from datetime import datetime
 
 DIR = os.path.dirname(os.path.realpath(__file__))

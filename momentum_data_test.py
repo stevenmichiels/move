@@ -18,6 +18,29 @@ from datetime import date
 from datetime import datetime
 
 
+DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+if not os.path.exists(os.path.join(DIR, 'data')):
+        os.makedirs(os.path.join(DIR, 'data'))
+if not os.path.exists(os.path.join(DIR, 'tmp')):
+        os.makedirs(os.path.join(DIR, 'tmp'))
+
+try:
+        with open(os.path.join(DIR, 'config_private.yaml'), 'r') as stream:
+            private_config = yaml.safe_load(stream)
+except FileNotFoundError:
+        private_config = None
+except yaml.YAMLError as exc:
+            print(exc)
+
+try:
+        with open('config.yaml', 'r') as stream:
+            config = yaml.safe_load(stream)
+except FileNotFoundError:
+        config = None
+except yaml.YAMLError as exc:
+            print(exc)
 
 def cfg(key):
         try:
@@ -27,7 +50,6 @@ def cfg(key):
                 return config[key]
             except:
                 return None
-
 
 
 API_KEY = cfg("API_KEY")

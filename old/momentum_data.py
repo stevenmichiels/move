@@ -20,9 +20,7 @@ from datetime import datetime
 DIR = os.path.dirname(os.path.realpath(__file__))
 
 ETF_filter = ['QQQ', 'SPX','SP400']
-ETF_filter = ['WCLD']
-ETF_filter = ['BUG']
-ETF_filter = ['QQQ','SPX']
+
 
 
 ETF_string = '_'.join(ETF_filter)
