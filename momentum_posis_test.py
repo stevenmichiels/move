@@ -13,8 +13,7 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 
 PRICE_DATA_INFO = os.path.join(DIR, "data", "price_info.txt")
 # read PRICE_DATA_INFO
-with open(PRICE_DATA_INFO, "r") as fp:
-    PRICE_DATA_INFO = fp.read()
+
 dir_datetime=datetime.now()
 dir_name= str(dir_datetime.year)+str(dir_datetime.month).rjust(2,'0')+str(dir_datetime.day).rjust(2,'0')+'_'
 
@@ -37,8 +36,8 @@ except yaml.YAMLError as exc:
 PRICE_DATA = os.path.join(DIR, "data", "price_history.json")
 PRICE_DATA_INFO = os.path.join(DIR, "data", "price_info.txt")
 # read PRICE_DATA_INFO
-with open(PRICE_DATA_INFO, "r") as fp:
-    PRICE_DATA_INFO = fp.read()
+#with open(PRICE_DATA_INFO, "r") as fp:
+ #   PRICE_DATA_INFO = fp.read()
 
 ACCOUNT_VALUE = cfg("CASH")
 RISK_FACTOR_CFG = cfg("RISK_FACTOR")
