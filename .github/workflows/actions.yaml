@@ -27,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: execute py script
         run: |
-          python momentum.py
+          python momentum_test.py
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
