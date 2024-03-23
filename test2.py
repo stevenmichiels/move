@@ -25,19 +25,14 @@ import datetime as dt
 from tvScrape import TvScrape, Interval
 tv = TvScrape()
 
-# read tickers.csv
-def read_tickers():
-   tickers = pd.read_csv('tickers.csv')
-   return tickers
+holdingsdir = os.path.join(os.getcwd(),'Holdings')
+tickers = pd.read_csv(os.path.join(holdingsdir, 'holdings_all.csv'), header=0, sep=',')
 
-tickers=read_tickers()
 
 # index
 spx = tv.get_hist(symbol="SPX",exchange="SP",interval='1D',n_bars=250, extended_session=False)
 
-
-
-def load_data(ticker,  exchange_='NYSE', number_bars=250, benchmark=spx):
+def load_from_tvscrape(ticker,  exchange_='NYSE', number_bars=250, benchmark=spx):
     # Get historical data
     data = tv.get_hist(symbol=ticker, exchange=exchange_, interval='1D', n_bars=number_bars)
     data['Ticker']=ticker
@@ -61,43 +56,27 @@ def load_data(ticker,  exchange_='NYSE', number_bars=250, benchmark=spx):
     data['r144EMA']=data['relative'].ewm(span=144,adjust=False).mean()
     return data
 
-ticker_='ABNB'
-exchange_='NASDAQ'
-
-list_columns = ['Ticker', 'Exchange','Close']
-list_append = list()
-
-test=pd.read_csv('tickers.csv')
-
-list_append = list()
-filter = test.Exchange.isna()
-
-msft = yf.Ticker("MSFT")
-
-# get all stock info
-
-msft.info['forwardPE']
-msft.info['marketCap']
-msft.info['fiftyTwoWeekLow']
-msft.info['fiftyTwoWeekHigh']
-msft.info['fiftyDayAverage']
-msft.info['twoHundredDayAverage']
-
-# get historical market data
-hist = msft.history(period="6mo")
+ticker = tickers.iloc[0]['Symbol']
+ticker='XOM'
+symbol = yf.Ticker(ticker)
+hist = symbol.history(period="12mo")
+histhour = symbol.history(period="10d", interval='60m')
 
 hist['12EMA']=hist['Close'].ewm(span=12,adjust=False).mean()
 hist['50EMA']=hist['Close'].ewm(span=50,adjust=False).mean()
 hist['144EMA']=hist['Close'].ewm(span=144,adjust=False).mean()
 
+symbol.info['forwardPE']
+symbol.info['marketCap']
+symbol.info['fiftyTwoWeekLow']
+symbol.info['fiftyTwoWeekHigh']
+symbol.info['fiftyDayAverage']
+symbol.info['twoHundredDayAverage']
+
+# get historical market data
+
+
 # plot all the 3 EMAs
 hist[['Close','12EMA','50EMA','144EMA']].plot(figsize=(10,5))
 
-holdings=pd.read_csv(os.path.join(os.getcwd(),'Holdings', 'XME.csv'), header=0, sep=';')
-
-for ticker in holdings.Symbol:
-    print(ticker)
-    data = yf.Ticker(ticker)
-    hist = data.history(period="6mo")
-
-print('Done')
+interval="1d",
