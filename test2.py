@@ -56,15 +56,37 @@ def load_from_tvscrape(ticker,  exchange_='NYSE', number_bars=250, benchmark=spx
     data['r144EMA']=data['relative'].ewm(span=144,adjust=False).mean()
     return data
 
+def ema(hist,period=5):
+    return hist['Close'].ewm(span=period,adjust=False).mean()
+
+def gain_3ema(hist,period=5):
+    return hist['3EMA'].pct_change(period)*100
+
+
+def gain_close(hist,period=5):
+    return hist['Close'].pct_change(period)*100
+
+
+tickers_df = pd.DataFrame(columns=['Ticker','ETF', 'ETFInSPX','5EMA','12EMA','50EMA','144EMA'])
+
 ticker = tickers.iloc[0]['Symbol']
 ticker='XOM'
 symbol = yf.Ticker(ticker)
+
+
+
+
 hist = symbol.history(period="12mo")
 histhour = symbol.history(period="10d", interval='60m')
 
-hist['12EMA']=hist['Close'].ewm(span=12,adjust=False).mean()
-hist['50EMA']=hist['Close'].ewm(span=50,adjust=False).mean()
-hist['144EMA']=hist['Close'].ewm(span=144,adjust=False).mean()
+
+hist['3EMA']=ema(hist,3) 
+hist['5EMA']=ema(hist,5)
+hist['12EMA']=ema(hist,12)
+hist['50EMA']=ema(hist,50)
+hist['144EMA']=ema(hist,144)
+hist['5dgain']=gain_3ema(hist)
+hist['5dgainclose']=gain_close(hist)
 
 symbol.info['forwardPE']
 symbol.info['marketCap']
@@ -73,10 +95,11 @@ symbol.info['fiftyTwoWeekHigh']
 symbol.info['fiftyDayAverage']
 symbol.info['twoHundredDayAverage']
 
-# get historical market data
-
-
-# plot all the 3 EMAs
+# plot
 hist[['Close','12EMA','50EMA','144EMA']].plot(figsize=(10,5))
 
-interval="1d",
+symbollist = [num for num in tickers.iloc[0]] + [hist['5EMA'].iloc[-1],hist['12EMA'].iloc[-1],hist['12EMA'].iloc[-1],hist['50EMA'].iloc[-1]hist['144EMA'].iloc[-1]]
+# append testlist to tickers_df
+tickers_df.loc[len(tickers_df)] = symbollist
+
+

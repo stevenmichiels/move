@@ -240,7 +240,7 @@ def main(ETF_filter):
     with open(PRICE_DATA_INFO, "w") as f:
         f.write(ETF_string)
 
-    df_securities = pd.read_csv(('tickers.csv'), delimiter=',')
+    df_securities = pd.read_csv(('tickers_ETF.csv'), delimiter=',')
     df_securities = df_securities[df_securities['ETF'].isin(ETF_filter)]
     df_securities=df_securities.reset_index()
     
