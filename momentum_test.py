@@ -34,7 +34,7 @@ def main5():
    momentum_posis_test.main(etfstring)
 
 def main6():
-   etfstring = ['XOP', 'XLE']
+   etfstring = [ 'XLE']
    momentum_data_test.main(etfstring)
    momentum_posis_test.main(etfstring)
    
